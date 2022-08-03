@@ -1,0 +1,25 @@
+#!/bin/sh
+
+set -e
+
+BASEDIR=$PWD
+cd $BASEDIR
+mkdir -p /opt/sersorsProject/veml7700-waypoint-agent
+cp -r . /opt/sersorsProject/veml7700-waypoint-agent
+cd /opt/sersorsProject/veml7700-waypoint-agent
+
+echo "=> Installing libgpiod2...\n"
+apt install -y libgpiod2
+
+echo "=> Installing veml7700 requirements...\n"
+pip3 install -r requirements.txt
+
+echo "=> Installing veml7700 service...\n"
+cp veml7700.service /etc/systemd/system/
+systemctl daemon-reload
+systemctl enable veml7700.service
+systemctl start veml7700.service
+
+cd $BASEDIR
+
+echo "veml7700 installed.\n"

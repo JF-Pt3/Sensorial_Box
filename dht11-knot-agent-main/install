@@ -1,0 +1,25 @@
+#!/bin/sh
+
+set -e
+
+BASEDIR=$PWD
+cd $BASEDIR
+mkdir -p /opt/sersorsProject/dht11-waypoint-agent
+cp -r . /opt/sersorsProject/dht11-waypoint-agent
+cd /opt/sersorsProject/dht11-waypoint-agent
+
+echo "=> Installing libgpiod2...\n"
+apt install -y libgpiod2
+
+echo "=> Installing dht11 requirements...\n"
+pip3 install -r requirements.txt
+
+echo "=> Installing dht11 service...\n"
+cp dht11.service /etc/systemd/system/
+systemctl daemon-reload
+systemctl enable dht11.service
+systemctl start dht11.service
+
+cd $BASEDIR
+
+echo "Dh11 installed.\n"

@@ -1,0 +1,11 @@
+[Unit]
+Description=Fan Control
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python /opt/sersorsProject/fan-waypoint-agent/main.py
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target

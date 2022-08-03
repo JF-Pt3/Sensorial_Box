@@ -1,0 +1,11 @@
+[Unit]
+Description=ADC Pi
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python /opt/sersorsProject/adcpi-knot-agent/main.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

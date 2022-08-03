@@ -1,0 +1,26 @@
+#!/bin/sh
+
+set -e
+
+BASEDIR=$PWD
+cd $BASEDIR
+
+echo "=> Installing Node.js + required dependencies...\n"
+curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+apt-get install -y nodejs git make g++ gcc
+
+echo "=> Installing zigbee2mqtt...\n"
+mkdir /opt/zigbee2mqtt
+chown -R pi:pi /opt/zigbee2mqtt
+git clone --depth 1 https://github.com/Koenkk/zigbee2mqtt.git /opt/zigbee2mqtt
+cd /opt/zigbee2mqtt
+npm ci
+
+cd $BASEDIR
+
+echo "=> Installing zigbee2mqtt service...\n"
+cp zigbee2mqtt.service /etc/systemd/system/
+systemctl daemon-reload
+systemctl enable zigbee2mqtt.service
+
+echo "zigbee2mqtt installed.\n"

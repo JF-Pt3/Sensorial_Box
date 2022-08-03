@@ -1,0 +1,29 @@
+#!/bin/sh
+
+set -e
+
+BASEDIR=$PWD
+cd $BASEDIR
+mkdir -p /opt/sersorsProject/db-waypoint-agent
+cp -r . /opt/sersorsProject/db-waypoint-agent
+cd /opt/sersorsProject/db-waypoint-agent
+
+echo "=> Installing mariaDB...\n"
+apt install mariadb-server -y --fix-missing
+mysql_secure_installation
+
+echo "=> Creating user and tables...\n"
+mysql -u root -p < sersorsProject.sql
+
+echo "=> Installing db requirements...\n"
+pip3 install -r requirements.txt
+
+echo "=> Installing dbsersorsProject service...\n"
+cp dbsersorsProject.service /etc/systemd/system/
+systemctl daemon-reload
+systemctl enable dbsersorsProject.service
+systemctl start dbsersorsProject.service
+
+cd $BASEDIR
+
+echo "db installed.\n"

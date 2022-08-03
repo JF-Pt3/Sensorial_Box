@@ -1,0 +1,3 @@
+git+https://github.com/abelectronicsuk/ABElectronics_Python_Libraries.git
+smbus2
+paho-mqtt

@@ -1,0 +1,19 @@
+#!/bin/sh
+
+set -e
+
+BASEDIR=$PWD
+cd $BASEDIR
+mkdir -p /opt/sersorsProject/fan-waypoint-agent
+cp -r . /opt/sersorsProject/fan-waypoint-agent
+cd /opt/sersorsProject/fan-waypoint-agent
+
+echo "=> Installing fan service...\n"
+cp fan.service /etc/systemd/system/
+systemctl daemon-reload
+systemctl enable fan.service
+systemctl start fan.service
+
+cd $BASEDIR
+
+echo "Fan installed.\n"

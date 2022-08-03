@@ -1,0 +1,2 @@
+adafruit-circuitpython-veml7700
+paho-mqtt

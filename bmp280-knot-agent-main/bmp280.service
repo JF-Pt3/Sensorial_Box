@@ -1,0 +1,11 @@
+[Unit]
+Description=Sensor Bmp280
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python /opt/sersorsProject/bmp280-waypoint-agent/main.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

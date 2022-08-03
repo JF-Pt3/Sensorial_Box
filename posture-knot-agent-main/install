@@ -1,0 +1,48 @@
+#!/bin/sh
+
+set -e
+
+BASEDIR=$PWD
+cd $BASEDIR
+mkdir -p /opt/sersorsProject/posture-waypoint-agent
+cp -r . /opt/sersorsProject/posture-waypoint-agent
+cd /opt/sersorsProject/posture-waypoint-agent
+
+echo "=> Installing posture requirements...\n"
+pip3 install -r requirements.txt
+
+echo "=> Installing posture services...\n"
+
+bash -c "cat >| /etc/systemd/system/posture1.service" <<EOF
+[Unit]
+Description=Posture 1
+After=multi-user.target
+[Service]
+Type=simple
+ExecStart=/usr/bin/python /opt/sersorsProject/posture-waypoint-agent/main.py $1 $2 posture1
+Restart=always
+[Install]
+WantedBy=multi-user.target
+EOF
+systemctl posture1-reload
+systemctl enable posture1
+system start posture1
+
+bash -c "cat >| /etc/systemd/system/posture2.service" <<EOF
+[Unit]
+Description=Posture 2
+After=multi-user.target
+[Service]
+Type=simple
+ExecStart=/usr/bin/python /opt/sersorsProject/posture-waypoint-agent/main.py $3 $4 posture2
+Restart=always
+[Install]
+WantedBy=multi-user.target
+EOF
+systemctl posture2-reload
+systemctl enable posture2
+system start posture2
+
+cd $BASEDIR
+
+echo "posture installed.\n"

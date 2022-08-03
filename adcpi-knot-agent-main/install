@@ -1,0 +1,28 @@
+#!/bin/sh
+
+set -e
+
+BASEDIR=$PWD
+cd $BASEDIR
+mkdir -p /opt/sersorsProject/adcpi-knot-agent
+cp -r . /opt/sersorsProject/adcpi-knot-agent
+cd /opt/sersorsProject/adcpi-knot-agent
+
+echo "=> Installing libgpiod2...\n"
+apt install -y libgpiod2
+
+echo "=> Installing git...\n"
+apt install -y git
+
+echo "=> Installing ADCpi requirements...\n"
+pip3 install -r requirements.txt
+
+echo "=> Installing ADCpi service...\n"
+cp adcpi.service /etc/systemd/system/
+systemctl daemon-reload
+systemctl enable adcpi.service
+systemctl start adcpi.service
+
+cd $BASEDIR
+
+echo "ADCpi installed.\n"
